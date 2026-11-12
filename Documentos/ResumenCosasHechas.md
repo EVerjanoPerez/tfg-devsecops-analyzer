@@ -1,21 +1,14 @@
 1. **Crear la estructura ordenada:**
    Creamos una jerarquía limpia de monorepo en la raíz (`TFG/`) separando el código (`Codigo/backend/`) de la documentación (`Documentos/`) para mantener una organización profesional.
 
-2. **Crear un Entorno Virtual (venv):**
-   Usamos Python para crear una carpeta aislada `venv` dentro de backend, evitando conflictos de versiones en el sistema.
+2. **Crear un Entorno Virtual (venv) y servidor base:**
+   Configuramos el entorno aislado en Python e instalamos FastAPI y Uvicorn, comprobando la documentación automática en `/docs`.
 
-3. **Instalar las herramientas de servidor (FastAPI y Uvicorn):**
-   Descargamos FastAPI (framework web) y Uvicorn (motor del servidor físico local).
+3. **Configuración del Control de Versiones y GitHub:**
+   Inicializamos Git en la raíz del monorepo, configuramos `.gitignore`, ajustamos la identidad local del autor y sincronizamos el repositorio remoto en GitHub (`git push` / `git pull`).
 
-4. **Crear el archivo main.py:**
-   Escribimos el primer endpoint raíz de prueba y comprobamos el funcionamiento de la documentación automática en `http://127.0.0.1:8000/docs`.
+4. **Análisis y Diseño de Arquitectura de Software (`DisenoSoftware.md`):**
+   Definimos la arquitectura de Monolito Modular (`app/`, `core/`, `modules/`, `common/`), los patrones de diseño (*Strategy*, *Repository*, Inyección de Dependencias), el flujo de datos híbrido, el contrato JSON de vulnerabilidades (con mapeo OWASP Top 10, CWE y propuesta de parcheo) y las medidas de resiliencia y seguridad.
 
-5. **Configuración del Control de Versiones (Monorepo con Git):**
-   * Inicializamos Git en la carpeta raíz (`TFG/`) para controlar conjuntamente el código y los documentos.
-   * Creamos un archivo `.gitignore` general para proteger los entornos virtuales (`venv/`) y archivos temporales (`__pycache__/`).
-   * Realizamos el primer commit oficial (`feat: estructura inicial...`).
-
-6. **Sincronización con GitHub:**
-   * Creamos el repositorio remoto en GitHub.
-   * Configuramos la identidad local de Git (`user.name` y `user.email`) para asegurar la autoría correcta en equipos compartidos.
-   * Realizamos el `git push` con éxito para respaldar el proyecto en la nube.
+5. **Especificación de Requisitos de Software (`Requisitos.md`):**
+   Documentamos formalmente los Requisitos Funcionales (RF-01 a RF-10) y No Funcionales (RNF-01 a RNF-11) bajo estándar IEEE 830, estableciendo **Python y C** como los lenguajes iniciales de análisis sobre una arquitectura fácilmente extensible a otros lenguajes.
