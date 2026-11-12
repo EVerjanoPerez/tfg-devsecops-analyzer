@@ -2,9 +2,30 @@
 skinparam classAttributeIconSize 0
 skinparam shadowing false
 
+class RuleLoader {
+  - rules_dir: Path
+  + get_current_version(): str
+  + load_rules(language: str): List[RuleDefinition]
+  + reload(): void
+}
+
+class RuleDefinition {
+  + rule_id: str
+  + language: str
+  + pattern_type: str
+  + target: str
+  + title: str
+  + severity: str
+  + owasp_category: str
+  + cwe_id: str
+  + explanation: str
+  + suggested_code: str
+}
+
 abstract class BaseEngine {
   + {abstract} name: str
   + {abstract} supported_languages: List[str]
+  # rules: List[RuleDefinition]
   + {abstract} scan(code: str, language: str): List[VulnerabilitySchema]
   + supports(language: str): bool
 }
@@ -13,16 +34,14 @@ class PythonASTEngine {
   + name: str = "PythonASTEngine"
   + supported_languages: List[str] = ["python"]
   + scan(code: str, language: str): List[VulnerabilitySchema]
-  - _check_dangerous_calls(tree: AST): List[VulnerabilitySchema]
-  - _check_insecure_deserialization(tree: AST): List[VulnerabilitySchema]
+  - _evaluate_ast_rules(tree: AST): List[VulnerabilitySchema]
 }
 
 class CStaticEngine {
   + name: str = "CStaticEngine"
   + supported_languages: List[str] = ["c"]
   + scan(code: str, language: str): List[VulnerabilitySchema]
-  - _check_buffer_overflows(code: str): List[VulnerabilitySchema]
-  - _check_format_strings(code: str): List[VulnerabilitySchema]
+  - _evaluate_pattern_rules(code: str): List[VulnerabilitySchema]
 }
 
 class AIEngine {
@@ -42,6 +61,7 @@ class EngineRegistry {
 class AnalyzerService {
   - registry: EngineRegistry
   - repository: ScanRepository
+  - rule_loader: RuleLoader
   + analyze_code(request: AnalyzeRequest): AnalyzeResponse
   - _calculate_sha256(code: str): str
 }
@@ -61,7 +81,10 @@ BaseEngine <|-- PythonASTEngine
 BaseEngine <|-- CStaticEngine
 BaseEngine <|-- AIEngine
 
+BaseEngine o-- RuleDefinition : aplica
+RuleLoader ..> RuleDefinition : instancia
 EngineRegistry o-- BaseEngine : gestiona
 AnalyzerService --> EngineRegistry : consulta
+AnalyzerService --> RuleLoader : verifica version
 AnalyzerService ..> VulnerabilitySchema : genera
 @enduml

@@ -2,9 +2,9 @@
 skinparam componentStyle uml2
 skinparam shadowing false
 
-package "Clientes (Agnóstico)" {
+package "Clientes (Agnostico)" {
   [Interfaz Web (Angular)] as Web
-  [Extensión IDE / CLI] as CLI
+  [Extension IDE / CLI] as CLI
   [Pipeline CI/CD] as CICD
 }
 
@@ -12,19 +12,26 @@ package "Backend FastAPI (Monolito Modular)" {
   
   package "Capa HTTP (API REST)" {
     [Analyzer Router\n(/api/v1/analyze)] as Router
-    [Pydantic Schemas\n(Validación + OWASP/CWE)] as Schemas
+    [Pydantic Schemas\n(Validacion + OWASP/CWE)] as Schemas
   }
 
   package "Capa de Negocio (Service)" {
-    [Analyzer Service\n(Orquestador Híbrido)] as Service
-    [Cache Manager\n(Hash SHA-256)] as Cache
+    [Analyzer Service\n(Orquestador Hibrido)] as Service
+    [Cache Manager\n(Hash SHA-256 + Rules Version)] as Cache
   }
 
-  package "Motores de Análisis (Patrón Strategy)" {
+  package "Motores de Analisis (Patron Strategy)" {
+    [EngineRegistry] as Registry
     interface "BaseEngine" as IEngine
     [Python AST Engine] as PyEngine
     [C Static Engine] as CEngine
     [AI Context Engine] as AIEngine
+  }
+
+  folder "Base de Conocimiento (Rules JSON)" {
+    [metadata.json\n(Version OWASP/CWE)] as MetaRules
+    [python_rules.json] as PyRules
+    [c_rules.json] as CRules
   }
 
   package "Infraestructura y Transversal (Core & Common)" {
@@ -43,20 +50,25 @@ CLI --> Router : HTTPS / JSON
 CICD --> Router : HTTPS / JSON
 
 Router --> Schemas : Valida entrada/salida
-Router --> Service : Inyección de Dependencias
+Router --> Service : Inyeccion de Dependencias
 
-Service --> Cache : Verifica Hash
-Service --> IEngine : Ejecuta estrategia
+Service --> Cache : Verifica Hash + Version
+Service --> Registry : Consulta motores por lenguaje
 Service --> Repo : Persiste resultados
 
+Registry o-- IEngine : gestiona
 IEngine <|.. PyEngine
 IEngine <|.. CEngine
 IEngine <|.. AIEngine
+
+PyEngine --> PyRules : Carga dinamica
+CEngine --> CRules : Carga dinamica
+Service --> MetaRules : Consulta version vigente
 
 AIEngine --> LLM : Consulta contextual
 Repo --> DB : SQLAlchemy / SQLModel
 
 Service ..> Logger : Registra trazas
-Service ..> Exc : Aísla fallos
-Config ..> Service : Parámetros
+Service ..> Exc : Aisla fallos
+Config ..> Service : Parametros
 @enduml

@@ -5,7 +5,8 @@ skinparam shadowing false
 entity "SCANS" as scans {
   * id : UUID <<PK>>
   --
-  * code_hash : VARCHAR(64) <<UNIQUE, INDEX>>
+  * code_hash : VARCHAR(64) <<INDEX>>
+  * rules_version : VARCHAR(20) <<INDEX>>
   * language : VARCHAR(20)
   * source_code : TEXT
   * status : VARCHAR(20)

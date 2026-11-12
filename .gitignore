@@ -1,8 +1,44 @@
-# Entornos virtuales
-**/venv/
-**/__pycache__/
+# ==============================================================================
+# ARCHIVO .gitignore - PROYECTO ANALIZADOR SAST CON IA (TFG)
+# Proposito: Evitar que se suban a GitHub archivos privados, entornos virtuales,
+# bases de datos locales o archivos temporales generados automaticamente.
+# ==============================================================================
 
-# Archivos temporales del sistema operativo
-Thumbs.db
-.DS_Store
+# 1. ARCHIVO PRIVADO DE CONTEXTO LOCAL (Regla estricta del proyecto)
 Documentos/ContextoIA.md
+
+# 2. SECRETOS Y VARIABLES DE ENTORNO (Seguridad - RNF-08)
+.env
+*.env
+.env.*
+
+# 3. ENTORNOS VIRTUALES DE PYTHON
+venv/
+.venv/
+env/
+ENV/
+
+# 4. ARCHIVOS COMPILADOS Y CACHE DE PYTHON
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 5. BASES DE DATOS LOCALES Y LOGS DE EJECUCION
+*.db
+*.sqlite
+*.sqlite3
+*.log
+app.log
+
+# 6. CACHE DE PRUEBAS Y HERRAMIENTAS DE CALIDAD (Pytest / Coverage)
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 7. CONFIGURACIONES DE EDITORES / IDEs Y SISTEMA OPERATIVO
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

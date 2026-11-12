@@ -8,15 +8,15 @@ actor "Administrador del Sistema" as Admin
 actor "Cliente Externo\n(CI/CD / Web / IDE)" as Client
 
 rectangle "Plataforma Analizador SAST con IA" {
-  usecase "UC-01: Analizar fragmento de código\n(Python / C)" as UC1
+  usecase "UC-01: Analizar fragmento de codigo\n(Python / C)" as UC1
   usecase "UC-02: Consultar informe de\nvulnerabilidades (OWASP / CWE)" as UC2
-  usecase "UC-03: Obtener propuestas de\nremediación y parches" as UC3
+  usecase "UC-03: Obtener propuestas de\nremediacion y parches" as UC3
   usecase "UC-04: Consultar historial\nde escaneos previos" as UC4
-  usecase "UC-05: Recuperar resultado\ndesde Caché (SHA-256)" as UC5
+  usecase "UC-05: Recuperar resultado\ndesde Cache (SHA-256 + Version)" as UC5
   usecase "UC-06: Auditar logs y\nerrores del sistema" as UC6
-  usecase "UC-07: Configurar motores y\nparámetros (.env)" as UC7
+  usecase "UC-07: Configurar motores y\nactualizar reglas JSON" as UC7
   usecase "UC-08: Analizar proyecto completo\n(.zip / Git) [Futuro]" as UC8
-  usecase "UC-09: Ejecutar código en\nSandbox aislado [Futuro]" as UC9
+  usecase "UC-09: Ejecutar codigo en\nSandbox aislado [Futuro]" as UC9
 }
 
 User --> UC1

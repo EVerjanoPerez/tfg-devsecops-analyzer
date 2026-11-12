@@ -5,7 +5,9 @@ skinparam shadowing false
 actor "Usuario / Cliente" as Client
 participant "AnalyzerRouter" as Router
 participant "AnalyzerService" as Service
-participant "ScanRepository\n(Caché / BD)" as Repo
+participant "RuleLoader" as Loader
+participant "ScanRepository\n(Cache / BD)" as Repo
+participant "EngineRegistry" as Registry
 participant "StaticEngine\n(Python AST / C)" as Static
 participant "AIEngine" as AI
 participant "CentralLogger" as Logger
@@ -18,17 +20,27 @@ Router -> Service : analyze_code(request)
 activate Service
 
 Service -> Service : Calcular hash SHA-256
-Service -> Repo : find_by_hash(sha256)
+Service -> Loader : get_current_version()
+activate Loader
+Loader --> Service : rules_version
+deactivate Loader
+
+Service -> Repo : find_by_hash_and_version(sha256, rules_version)
 activate Repo
 Repo --> Service : None (Cache Miss)
 deactivate Repo
+
+Service -> Registry : get_engines_for_language(language)
+activate Registry
+Registry --> Service : [StaticEngine, AIEngine]
+deactivate Registry
 
 Service -> Static : scan(code, language)
 activate Static
 Static --> Service : hallazgos_estaticos[]
 deactivate Static
 
-alt Análisis profundo habilitado o hallazgos complejos
+alt Analisis profundo habilitado o hallazgos complejos
   Service -> AI : scan(code, language)
   activate AI
   alt IA disponible
@@ -36,14 +48,14 @@ alt Análisis profundo habilitado o hallazgos complejos
   else Error / Timeout en IA
     AI --> Service : Exception controlada
     Service -> Logger : log_error("Fallo en AIEngine")
-    note right: Aislamiento de fallos:\nContinúa con resultados estáticos
+    note right: Aislamiento de fallos:\nContinua con resultados estaticos
   end
   deactivate AI
 end
 
 Service -> Service : Unificar y deduplicar\nhallazgos (OWASP + CWE + Parche)
 
-Service -> Repo : save_scan_result(scan_data)
+Service -> Repo : save_scan_result(scan_data, rules_version)
 activate Repo
 Repo --> Service : scan_id
 deactivate Repo
