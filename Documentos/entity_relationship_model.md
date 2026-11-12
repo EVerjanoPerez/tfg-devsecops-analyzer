@@ -1,4 +1,4 @@
-# 🗄️ Modelo Entidad-Relación (E-R) y Diseño de Base de Datos
+# Modelo Entidad-Relación (E-R) y Diseño de Base de Datos
 
 **Proyecto:** Analizador SAST de Ciberseguridad con IA (TFG)  
 **Versión:** 1.0  
