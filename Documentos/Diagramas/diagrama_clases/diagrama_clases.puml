@@ -1,0 +1,67 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+abstract class BaseEngine {
+  + {abstract} name: str
+  + {abstract} supported_languages: List[str]
+  + {abstract} scan(code: str, language: str): List[VulnerabilitySchema]
+  + supports(language: str): bool
+}
+
+class PythonASTEngine {
+  + name: str = "PythonASTEngine"
+  + supported_languages: List[str] = ["python"]
+  + scan(code: str, language: str): List[VulnerabilitySchema]
+  - _check_dangerous_calls(tree: AST): List[VulnerabilitySchema]
+  - _check_insecure_deserialization(tree: AST): List[VulnerabilitySchema]
+}
+
+class CStaticEngine {
+  + name: str = "CStaticEngine"
+  + supported_languages: List[str] = ["c"]
+  + scan(code: str, language: str): List[VulnerabilitySchema]
+  - _check_buffer_overflows(code: str): List[VulnerabilitySchema]
+  - _check_format_strings(code: str): List[VulnerabilitySchema]
+}
+
+class AIEngine {
+  + name: str = "AIEngine"
+  + supported_languages: List[str] = ["*"]
+  - model_endpoint: str
+  + scan(code: str, language: str): List[VulnerabilitySchema]
+  - _build_security_prompt(code: str, language: str): str
+}
+
+class EngineRegistry {
+  - _engines: Dict[str, List[BaseEngine]]
+  + register(engine: BaseEngine): void
+  + get_engines_for_language(language: str): List[BaseEngine]
+}
+
+class AnalyzerService {
+  - registry: EngineRegistry
+  - repository: ScanRepository
+  + analyze_code(request: AnalyzeRequest): AnalyzeResponse
+  - _calculate_sha256(code: str): str
+}
+
+class VulnerabilitySchema {
+  + title: str
+  + description: str
+  + severity: SeverityEnum
+  + owasp_category: str
+  + cwe_id: str
+  + line: int
+  + explanation: str
+  + suggested_code: str
+}
+
+BaseEngine <|-- PythonASTEngine
+BaseEngine <|-- CStaticEngine
+BaseEngine <|-- AIEngine
+
+EngineRegistry o-- BaseEngine : gestiona
+AnalyzerService --> EngineRegistry : consulta
+AnalyzerService ..> VulnerabilitySchema : genera
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+autonumber
+skinparam shadowing false
+
+actor "Usuario / Cliente" as Client
+participant "AnalyzerRouter" as Router
+participant "AnalyzerService" as Service
+participant "ScanRepository\n(Caché / BD)" as Repo
+participant "StaticEngine\n(Python AST / C)" as Static
+participant "AIEngine" as AI
+participant "CentralLogger" as Logger
+
+Client -> Router : POST /api/v1/analyze\n{code, language}
+activate Router
+
+Router -> Router : Validar payload (Pydantic)
+Router -> Service : analyze_code(request)
+activate Service
+
+Service -> Service : Calcular hash SHA-256
+Service -> Repo : find_by_hash(sha256)
+activate Repo
+Repo --> Service : None (Cache Miss)
+deactivate Repo
+
+Service -> Static : scan(code, language)
+activate Static
+Static --> Service : hallazgos_estaticos[]
+deactivate Static
+
+alt Análisis profundo habilitado o hallazgos complejos
+  Service -> AI : scan(code, language)
+  activate AI
+  alt IA disponible
+    AI --> Service : hallazgos_ia[]
+  else Error / Timeout en IA
+    AI --> Service : Exception controlada
+    Service -> Logger : log_error("Fallo en AIEngine")
+    note right: Aislamiento de fallos:\nContinúa con resultados estáticos
+  end
+  deactivate AI
+end
+
+Service -> Service : Unificar y deduplicar\nhallazgos (OWASP + CWE + Parche)
+
+Service -> Repo : save_scan_result(scan_data)
+activate Repo
+Repo --> Service : scan_id
+deactivate Repo
+
+Service -> Logger : log_info("Escaneo completado", scan_id)
+Service --> Router : AnalyzeResponse (JSON)
+deactivate Service
+
+Router --> Client : HTTP 200 OK (Informe SAST)
+deactivate Router
+@enduml

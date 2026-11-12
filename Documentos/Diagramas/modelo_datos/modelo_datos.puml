@@ -1,0 +1,44 @@
+@startuml
+skinparam linetype ortho
+skinparam shadowing false
+
+entity "SCANS" as scans {
+  * id : UUID <<PK>>
+  --
+  * code_hash : VARCHAR(64) <<UNIQUE, INDEX>>
+  * language : VARCHAR(20)
+  * source_code : TEXT
+  * status : VARCHAR(20)
+  * execution_time_ms : INTEGER
+  * created_at : TIMESTAMP
+}
+
+entity "VULNERABILITIES" as vulns {
+  * id : UUID <<PK>>
+  * scan_id : UUID <<FK>>
+  --
+  * title : VARCHAR(150)
+  * description : TEXT
+  * severity : VARCHAR(20)
+  * owasp_category : VARCHAR(50)
+  * cwe_id : VARCHAR(20)
+  * line_number : INTEGER
+  * engine_source : VARCHAR(50)
+  * remediation_explanation : TEXT
+  * suggested_code : TEXT
+}
+
+entity "AUDIT_LOGS" as logs {
+  * id : UUID <<PK>>
+  --
+  scan_id : UUID <<FK, NULLABLE>>
+  * level : VARCHAR(15)
+  * module : VARCHAR(50)
+  * message : TEXT
+  stack_trace : TEXT
+  * created_at : TIMESTAMP
+}
+
+scans ||--o{ vulns : "detecta (1:N)"
+scans ||--o{ logs : "registra (1:N)"
+@enduml
