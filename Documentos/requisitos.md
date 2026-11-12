@@ -1,4 +1,4 @@
-# 📋 Especificación de Requisitos de Software (SRS)
+# Especificación de Requisitos de Software (SRS)
 **Proyecto:** Analizador SAST de Ciberseguridad con IA (TFG)  
 **Versión:** 1.0  
 **Estándar de referencia:** IEEE 830 / ISO 29148  
