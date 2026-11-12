@@ -1,4 +1,4 @@
-# 📐 Documento de Análisis y Diseño de Software
+# Documento de Análisis y Diseño de Software
 **Proyecto:** Analizador SAST de Ciberseguridad con IA (TFG)  
 **Estilo Arquitectónico:** Monolito Modular basado en Capas y Patrones Limpios (*Clean Architecture / Modular Monolith*).
 
