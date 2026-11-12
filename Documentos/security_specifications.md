@@ -1,4 +1,4 @@
-# 🛡️ Especificaciones de Seguridad y Diseño Defensivo
+# Especificaciones de Seguridad y Diseño Defensivo
 
 **Proyecto:** Analizador SAST de Ciberseguridad con IA (TFG)  
 **Versión:** 1.0  
