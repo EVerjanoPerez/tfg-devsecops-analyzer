@@ -1,4 +1,4 @@
-# 🧩 Catálogo de Patrones de Diseño Aplicados
+# Catálogo de Patrones de Diseño Aplicados
 
 **Proyecto:** Analizador SAST de Ciberseguridad con IA (TFG)  
 **Versión:** 1.0  
