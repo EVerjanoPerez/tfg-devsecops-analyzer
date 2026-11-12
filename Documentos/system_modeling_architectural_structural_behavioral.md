@@ -1,4 +1,4 @@
-# 🏛️ Modelado Arquitectónico, Estructural y de Comportamiento
+# Modelado Arquitectónico, Estructural y de Comportamiento
 
 **Proyecto:** Analizador SAST de Ciberseguridad con IA (TFG)  
 **Versión:** 1.0  
