@@ -1,4 +1,4 @@
-# 🎭 Especificación de Casos de Uso (Use Cases)
+# Especificación de Casos de Uso (Use Cases)
 
 **Proyecto:** Analizador SAST de Ciberseguridad con IA (TFG)  
 **Versión:** 1.0  
